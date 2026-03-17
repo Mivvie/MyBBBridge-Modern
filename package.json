@@ -1,38 +1,34 @@
 {
-	"name": "mybbbridge",
-	"displayName": "MyBBBridge",
-	"description": "VSCode extension to edit and create MyBB themes and templates.",
-	"version": "0.0.3",
-	"publisher": "LeMinaw",
+	"name": "mybbbridge-modern",
+	"displayName": "MyBBBridge Modern",
+	"description": "Visual Studio Code extension aimed at making MyBB theme development more convenient. ",
+	"version": "0.1.0",
+	"publisher": "Mivvie",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/LeMinaw/MyBBBridge.git"
+		"url": "https://github.com/Mivvie/MyBBBridge-Modern.git"
 	},
 	"engines": {
-		"vscode": "^1.41.0"
+		"vscode": "^1.109.0"
+		
 	},
 	"categories": [
 		"Other"
 	],
 	"preview": true,
 	"activationEvents": [
-		"workspaceContains:.vscode/mbbb.json",
-		"onCommand:extension.createConfig"
+		"workspaceContains:.vscode/mbbbm.json"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "extension.createConfig",
-				"title": "MyBBBridge: Create config file"
+				"title": "MyBBBridge Modern: Create \"mybbm.json\" configuration file."
 			},
 			{
-				"command": "extension.loadTemplateSet",
-				"title": "MyBBBridge: Load MyBB template set from database"
-			},
-			{
-				"command": "extension.loadStyle",
-				"title": "MyBBBridge: Load MyBB style from database"
+				"command": "extension.addTheme",
+				"title": "MyBBBridge Modern: Add theme from database."
 			}
 		]
 	},

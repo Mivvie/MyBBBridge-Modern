@@ -38,8 +38,9 @@ abstract class MyBBSet {
 export class MyBBTemplateSet extends MyBBSet {
     sid: number|undefined;
 
+
     private async getSid(): Promise<number|undefined> {
-        const res = await this.query(
+        const result = await this.query(
             'SELECT sid FROM ?? WHERE title=?',
             [this.getTable('templatesets'), this.name],
             (err: any, result: any) => {
@@ -48,18 +49,46 @@ export class MyBBTemplateSet extends MyBBSet {
                 }
             }
         );
-        this.sid = res[0].sid;
+        this.sid = result[0].sid;
         return this.sid;
+    }
+
+    private async addMissingGlobals() {
+        await this.getSid();
+        const config = await getConfig();
+
+        await this.query(
+            `
+            INSERT INTO mybb_templates (title, template, sid, version, dateline)
+            SELECT title, template, ${this.sid}, version, UNIX_TIMESTAMP()
+            FROM mybb_templates
+            WHERE sid = -2
+            AND title NOT IN (
+                SELECT title FROM mybb_templates WHERE sid = ${this.sid}
+            );
+            `,
+            [],
+            (err: any, result: any) => {
+                if (err) {
+                    vscode.window.showErrorMessage(err);
+                } else {
+                    if (config.vscnotifications) {
+                        vscode.window.showInformationMessage(result);
+                    }
+                }
+            }
+        );
     }
 
     public async getElements(): Promise<any> {
         await this.getSid();
+        await this.addMissingGlobals();
         const templates = await this.query(
             'SELECT title, template FROM ?? WHERE sid=? ORDER BY sid DESC, title ASC',
             [this.getTable('templates'), this.sid],
             (err: any, result: any) => {
                 if (!result.length) {
-                    vscode.window.showErrorMessage(`No templates files found for template ${this.name}!`);
+                    vscode.window.showErrorMessage(`No template files found for template ${this.name}!`);
                 } 
             }
         );
@@ -68,42 +97,50 @@ export class MyBBTemplateSet extends MyBBSet {
 
     public async saveElement(name: string, content: string, version: number) {
         await this.getSid();
+        const config = await getConfig();
 
-        const res = await this.query(
+        const result = await this.query(
             'SELECT tid FROM ?? WHERE title=? AND sid=?',
             [this.getTable('templates'), name, this.sid],
         );
 
-        if (!res.length) { // Insert
+
+        if (!result.length) {
             this.query(
                 'INSERT INTO ?? SET title=?, template=?, sid=?, version=?',
                 [this.getTable('templates'), name, content, this.sid, version],
                 (err: any, result: any) => {
                     if (!err) {
-                        vscode.window.showInformationMessage(`Uploaded new template ${name} in DB.`);
+                        if (config.vscnotifications) {
+                            vscode.window.showInformationMessage(`Uploaded new template "${name}" to database.`);
+                        }
                     }
                 }
             );
-        } else { // Update
+        } else {
             this.query(
                 'UPDATE ?? SET template=? WHERE title=? AND sid=?',
                 [this.getTable('templates'), content, name, this.sid],
                 (err: any, result: any) => {
                     if (!err) {
-                        vscode.window.showInformationMessage(`Updated template ${name} in DB.`);
+                        if (config.vscnotifications) {
+                            vscode.window.showInformationMessage(`Updated template: ${name}.html`);
+                        }
                     }
                 }
             );
         }
     }
+
+
 }
 
 
-export class MyBBStyle extends MyBBSet {
+export class MyBBStylesheets extends MyBBSet {
     tid: number|undefined;
 
     private async getTid() {
-        const res = await this.query(
+        const result = await this.query(
             'SELECT tid FROM ?? WHERE name=?',
             [this.getTable('themes'), this.name],
             (err: any, result: any) => {
@@ -112,21 +149,41 @@ export class MyBBStyle extends MyBBSet {
                 }
             }
         );
-        this.tid = res[0].tid;
+        this.tid = result[0].tid;
         return this.tid;
     }
 
-    private async getSid(name: string) {
+    private async addMissingGlobals() {
         await this.getTid();
-        const res = await this.query(
-            'SELECT sid FROM ?? WHERE name=? AND tid=?',
-            [this.getTable('themestylesheets'), name, this.tid]
+        const config = await getConfig();
+
+        await this.query(
+            `
+            INSERT INTO mybb_themestylesheets (name, tid, attachedto, stylesheet, lastmodified)
+            SELECT name, ${this.tid}, attachedto, stylesheet, UNIX_TIMESTAMP()
+            FROM mybb_themestylesheets
+            WHERE tid = 1
+            AND name NOT IN (
+                SELECT name FROM mybb_themestylesheets WHERE tid = ${this.tid}
+            );
+            `,
+            [],
+            (err: any, result: any) => {
+                if (err) {
+                    vscode.window.showErrorMessage(err);
+                } else {
+                    if (config.vscnotifications) {
+                        vscode.window.showInformationMessage(result);
+                    }
+                }
+            }
         );
-        return res[0].sid;
     }
 
     public async getElements() {
         await this.getTid();
+        await this.addMissingGlobals();
+
         const stylesheets = await this.query(
             'SELECT name, stylesheet FROM ?? WHERE tid=? ORDER BY tid DESC, name ASC',
             [this.getTable('themestylesheets'), this.tid],
@@ -139,31 +196,41 @@ export class MyBBStyle extends MyBBSet {
         return stylesheets;
     }
 
-    public async saveElement(name: string, content: string, version: number) {
+    public async saveElement(name: string, content: string) {
         await this.getTid();
+        const config = await getConfig();
 
-        const res = await this.query(
+
+        const result = await this.query(
             'SELECT sid FROM ?? WHERE name=? AND tid=?',
             [this.getTable('themestylesheets'), name, this.tid],
         );
 
-        if (!res.length) { // Insert
+
+        // TODO
+        if (!result.length) {
             this.query(
                 'INSERT INTO ?? SET name=?, stylesheet=?, tid=?, lastmodified=?',
                 [this.getTable('themestylesheets'), name, content, this.tid, timestamp()],
                 (err: any, result: any) => {
                     if (!err) {
-                        vscode.window.showInformationMessage(`Uploaded new stylesheet ${name} in DB.`);
+                        if (config.vscnotifications) {
+                            //vscode.window.showInformationMessage(`Uploaded new stylesheet "${name}" to database.`);
+                        }
+                        this.requestCacheRefresh(name);
                     }
                 }
             );
-        } else { // Update
+        //
+        } else {
             this.query(
-                'UPDATE ?? SET stylesheet=?, lastmodified=? WHERE name=? AND tid=?',
+                'UPDATE ?? SET stylesheet=?, lastmodified=? WHERE name=? AND tid=?', // attached to?
                 [this.getTable('themestylesheets'), content, timestamp(), name, this.tid],
                 (err: any, result: any) => {
                     if (!err) {
-                        vscode.window.showInformationMessage(`Updated stylesheet ${name} in DB.`);
+                        if (config.vscnotifications) {
+                            vscode.window.showInformationMessage(`Updated stylesheet: ${name}`);
+                        }
                         this.requestCacheRefresh(name);
                     }
                 }
@@ -172,23 +239,23 @@ export class MyBBStyle extends MyBBSet {
     }
 
     public async requestCacheRefresh(name: string): Promise<void> {
+        await this.getTid();
         const config = await getConfig();
 
         if (config.mybbUrl) {
-            const scriptUrl = urlJoin([config.mybbUrl, 'cachecss.php']);
+            const scriptUrl = urlJoin([config.mybbUrl, 'mbbbm.php']);
 
-            request
-                .get({
-                    uri: scriptUrl,
-                    qs: {
-                        tid: this.tid,
-                        name: name
-                    }
-                })
-                .catch(err => {
-                    vscode.window.showErrorMessage("Failed to request stylesheet cache refresh!");
-                    throw err;
-                });
+            await request.get({
+                uri: scriptUrl,
+                qs: {
+                    tid: this.tid,
+                    name: name
+                }
+            })
+            .catch(err => {
+                vscode.window.showErrorMessage("Failed to request stylesheet cache refresh: " + err);
+                throw err;
+            });
         }
     }
 }

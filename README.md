@@ -1,85 +1,90 @@
-# MyBBBridge
+# MyBBBridge Modern
 
-MyBBBridge is an extension aimed at making MyBB template and theme dev more convenant.
+A Visual Studio Code extension that makes MyBB theme development more convenient by bringing your forum templates and stylesheets directly into your editor and syncing changes back to your database.
 
-**Warning: this software is pre-alpha. Make backups and use it at your own risk.**
+This project is a modernized and actively maintained fork of the original [MyBBBridge](https://github.com/LeMinaw/MyBBBridge) by LeMinaw, with ongoing improvements and updates.
 
-## Features
+## What is this?
 
-* Download themes (`.css`) and templates (`.html`) files from database to disk.
+If you develop themes for MyBB forums, this extension bridges the gap between your theme files in the database and your code editor. Instead of editing templates and stylesheets through the MyBB admin panel, you can work with them in VS Code like you would with any other project.
 
-* Save themes and templates to database when saved on disk.
+The extension connects directly to your MyBB database, pulls templates and stylesheets, and keeps them synced as you work. When you save changes in the editor, they automatically update in your forum's database.
 
-* Automatically refresh templates cache files on save.
+## Prerequisites
 
-## How to use
+To use this extension, you'll need:
 
-### Configuration
+- Visual Studio Code
+- A MyBB forum installation with database access
+- Database credentials (host, port, username, password)
+- [mbbbm.php (download here)](https://github.com/Mivvie/MyBBBridge-Modern/blob/master/mbbbm.php)
 
-To operate, MyBBBridge *needs* a `.vscode/mbbb.json` file at your workspace root.
+## Getting Started
 
-You can create one using the command `MyBBBridge: Create config file`.
+### Installation
 
-The default config file looks like this:
+Install the extension through the VS Code Extensions marketplace, or build it from source.
+
+### Initial Setup
+
+1. Open a folder in VS Code where you want to work on your MyBB theme
+2. Run the command `MyBBBridge Modern: Create "mybbm.json" configuration file`
+3. A `.vscode/mbbbm.json` file will be created with default settings
+4. Update the configuration with your MyBB database credentials:
 
 ```json
 {
     "database": {
-        "host": "localhost",
+        "host": "example.com",
         "port": 3306,
         "database": "mybb",
         "prefix": "mybb_",
-        "user": "root",
-        "password": ""
+        "user": "database_user",
+        "password": "database_password"
     },
-    "mybbVersion": 1860,
-    "mybbUrl": "http://localhost",
-    "autoUpload": true
+    "mybbVersion": 1839,
+    "mybbUrl": "https://example.com",
+    "vscnotifications": true
 }
 ```
 
-* `database`: This one should be quite self explanatory!
+5. Once configured, the extension will activate automatically
 
-* `mybbVersion`: MyBB version to be used in newly created theme files. Existing files
-  will keep their version metadata.
+### Important: Adding mbbbm.php to Your Forum
 
-* `mybbUrl`: URL of your MyBB board. Set to `null` or `''` to disable cache refresh
-  requests.
+For the cache to reset automatically when you save changes, you need to upload the `mbbbm.php` file included in this repository to your MyBB forum's root directory (the same location where you uploaded MyBB's `/upload/` directory).
 
-* `autoUpload`: If true, MyBBBridge will try to save theme and stylesheets to database
-  each time a corresponding file is saved in VSCode.
-  *Overrides existing database entries without confirmation!*
+Without this file in place, changes will sync to your database but the forum won't immediately pick them up. You'll need to manually go into the admin panel and save your theme after each change to clear the cache.
 
-### Cache refresh
+### Usage
 
-To be able to ask MyBB for template cache refresh, MyBBBridge requires you to upload
-the tiny `cachecss.php` php file of this repository to your web server, at the root of
-your MyBB directory. If you don't plan to use cache refresh, you can skip this step and
-set `mybbUrl` to `null` in your `mbbb.json` config file.
+After setup, you can use these commands:
 
-### Commands
+- **Add Theme from Database**: Loads a theme's templates and stylesheets from your MyBB forum into your workspace. Please make sure your template set and theme names are the same!
 
-* `MyBBBridge: Create config file`: Create a new config file, allowing you to start
-  using MyBBBridge.
 
-* `MyBBBridge: Load MyBB template set from database`: Download and save all templates
-  files of a given template set to the `./template_sets/<template_set_name>/` folder.
-  *Overrides existing files without confirmation!*
+## Features
 
-* `MyBBBridge: Load MyBB style from database`: Download and save all stylesheet files
-  of a given style to the `./styles/<style_name>/` folder.
-  *Overrides existing files without confirmation!*
+- Direct database connection to your MyBB installation
+- Pull templates and stylesheets into your editor
+- Auto-sync changes back to your forum
+- Configuration management through `mbbbm.json`
+- Notifications for important actions
 
-## Release Notes
+## Status
 
-### 0.0.1-alpha
+This project is in early development (version 0.1.0). Features are still being added and refined.
 
-Alpha release providing basic download features.
+## Development
 
-### 0.0.2-alpha
+To work on this extension:
 
-Alpha release with save features.
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Compile the TypeScript: `npm run compile`
+4. Watch for changes during development: `npm run watch`
+5. Run tests: `npm test`
 
-### 0.0.3-alpha
+## Contributing
 
-Alpha release allowing to refresh MyBB stylesheet cache files.
+Contributions are welcome! Feel free to open an issue or submit a pull request on [GitHub](https://github.com/Mivvie/MyBBBridge-Modern).
