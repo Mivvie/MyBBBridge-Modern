@@ -15,6 +15,7 @@ $name = $mybb->input['name'];
 if(empty($tid) || empty($name))
 	exit;
 
+$name = $db->escape_string($name);
 
 $content = $db->fetch_array($db->simple_select(
 	"themestylesheets",
@@ -24,7 +25,8 @@ $content = $db->fetch_array($db->simple_select(
 ))["stylesheet"];
 
 
-if($content)
-	cache_stylesheet($tid, $name, $content);
+cache_stylesheet($tid, $name, $content);
+update_theme_stylesheet_list($tid);
+
 
 ?>

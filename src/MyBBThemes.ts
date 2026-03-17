@@ -215,7 +215,7 @@ export class MyBBStylesheets extends MyBBSet {
                 (err: any, result: any) => {
                     if (!err) {
                         if (config.vscnotifications) {
-                            //vscode.window.showInformationMessage(`Uploaded new stylesheet "${name}" to database.`);
+                            vscode.window.showInformationMessage(`Uploaded new stylesheet "${name}" to database.`);
                         }
                         this.requestCacheRefresh(name);
                     }

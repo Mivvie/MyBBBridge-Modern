@@ -6,15 +6,6 @@ import { MyBBTemplateSet, MyBBStylesheets } from "./MyBBThemes";
 import { getWorkspacePath, makePath, getConfig, getConnection } from './utils';
 
 
-/*
-extension.createConfig
-extension.addTheme
-extension.updateThemeTemplateSets
-extension.updateThemeTemplateStyles
-extension.nuke (nuke everything, for testing)
-*/
-
-
 export async function createConfig() {
     const workspacePath = getWorkspacePath();
     
@@ -38,7 +29,7 @@ export async function createConfig() {
         if (err instanceof Error && (err as NodeJS.ErrnoException).code === 'ENOENT') {
             const defaultConf = JSON.stringify({
                 "database": {
-                    "host": "example.com",
+                    "host": "127.0.0.1",
                     "port": 3306,
                     "database": "mybb",
                     "prefix": "mybb_",
@@ -46,7 +37,7 @@ export async function createConfig() {
                     "password": "database_password"
                 },
                 "mybbVersion": 1839,
-                "mybbUrl": "https://example.com",
+                "mybbUrl": "http://127.0.0.1",
                 "vscnotifications": true
             }, null, 4);
 

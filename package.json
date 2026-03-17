@@ -1,7 +1,7 @@
 {
 	"name": "mybbbridge-modern",
 	"displayName": "MyBBBridge Modern",
-	"description": "Visual Studio Code extension aimed at making MyBB theme development more convenient. ",
+	"description": "Visual Studio Code extension aimed at making MyBB theme development more convenient.",
 	"version": "0.1.0",
 	"publisher": "Mivvie",
 	"repository": {
