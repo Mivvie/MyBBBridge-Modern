@@ -73,7 +73,7 @@ After setup, you can use these commands:
 
 ## Status
 
-This project is in early development (version 0.1.2). Features are still being added and refined.
+This project is in early development. Features are still being added and refined.
 
 ## Development
 
