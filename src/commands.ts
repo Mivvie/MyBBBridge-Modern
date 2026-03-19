@@ -6,7 +6,7 @@ import { MyBBTemplateSet, MyBBStylesheets } from "./MyBBThemes";
 import { getWorkspacePath, makePath, getConfig, getConnection } from './utils';
 
 
-export async function createConfig() {
+export async function setUp() {
     const workspacePath = getWorkspacePath();
     
 
@@ -44,13 +44,13 @@ export async function createConfig() {
             await fs.writeFile(configFilePath, defaultConf);
 
             
-            vscode.window.showInformationMessage(`Config file ${configFilePath} created sucessfully.`);
+            vscode.window.showInformationMessage(`Configuration file ${configFilePath} created sucessfully.`);
             return;
         }
         throw err;
     }
 
-    vscode.window.showErrorMessage(`Config file ${configFilePath} already exists!`);
+    vscode.window.showErrorMessage(`Configuration file ${configFilePath} already exists!`);
 }
 
 
@@ -58,7 +58,7 @@ export async function addTheme() {
     const config = await getConfig();
     const connection = getConnection(config.database);
 
-    const themeName = await vscode.window.showInputBox({ placeHolder: "Theme name (make sure both your template set and styles share the same name)" });
+    const themeName = await vscode.window.showInputBox({ placeHolder: "Theme name (ensure both your template set and styles share the same name)" });
     if (themeName === undefined) {
         return;
     }

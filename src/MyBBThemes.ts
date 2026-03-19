@@ -3,6 +3,7 @@ import * as mysql from 'mysql';
 import * as request from 'request-promise-native';
 
 import { timestamp, urlJoin, getConfig } from './utils';
+import { config } from 'process';
 
 
 abstract class MyBBSet {
@@ -24,7 +25,15 @@ abstract class MyBBSet {
         return new Promise((resolve, reject) => {
             this.con.query(req, params, (err: any, result: any) => {
                 if (err) {
-                    vscode.window.showErrorMessage(err.message);
+                    switch (err.code) {
+                        case "ECONNREFUSED":
+                            vscode.window.showErrorMessage("Unable to connect to the database. Please verify that the database is running.");
+                            break;
+
+                        default:
+                            vscode.window.showErrorMessage(err.message);
+                            break;
+                    }
                     return reject(err);
                 }
                 callback(err, result);
@@ -133,6 +142,21 @@ export class MyBBTemplateSet extends MyBBSet {
     }
 
 
+    public async deleteElement(name: string) {
+        await this.getSid();
+        const config = await getConfig();
+
+        await this.query(
+            'DELETE FROM ?? WHERE title=? AND sid=?',
+            [this.getTable('templates'), name, this.sid],
+            (err: any) => {
+                if (!err && config.vscnotifications) {
+                    vscode.window.showInformationMessage(`Deleted template: ${name}.html`);
+                }
+            }
+        );
+    }
+
 }
 
 
@@ -237,6 +261,24 @@ export class MyBBStylesheets extends MyBBSet {
             );
         }
     }
+
+
+    public async deleteElement(name: string) {
+        await this.getTid();
+        const config = await getConfig();
+
+        await this.query(
+            'DELETE FROM ?? WHERE name=? AND tid=?',
+            [this.getTable('themestylesheets'), name, this.tid],
+            (err: any) => {
+                if (!err && config.vscnotifications) {
+                    vscode.window.showInformationMessage(`Deleted stylesheet: ${name}`);
+                }
+                this.requestCacheRefresh(name);
+            }
+        );
+    }
+
 
     public async requestCacheRefresh(name: string): Promise<void> {
         await this.getTid();

@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
 
-import { createConfig, addTheme } from "./commands";
-import { onSaveEvent } from "./events";
+import { setUp, addTheme } from "./commands";
+import { onSaveEvent, onDeleteEvent } from "./events";
 
 
 export async function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('extension.createConfig', createConfig)
+		vscode.commands.registerCommand('extension.setUp', setUp)
 	);
 
 	context.subscriptions.push(
@@ -18,6 +18,10 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.workspace.onDidSaveTextDocument(onSaveEvent)
 	);
+
+	context.subscriptions.push(
+		vscode.workspace.onDidDeleteFiles(onDeleteEvent)
+	)
 }
 
 

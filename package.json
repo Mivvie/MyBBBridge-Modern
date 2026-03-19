@@ -24,7 +24,7 @@
 		"commands": [
 			{
 				"command": "extension.createConfig",
-				"title": "MyBBBridge Modern: Create \"mybbm.json\" configuration file."
+				"title": "MyBBBridge Modern: Set up."
 			},
 			{
 				"command": "extension.addTheme",

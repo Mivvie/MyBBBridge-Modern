@@ -50,7 +50,7 @@ export async function getConfig(): Promise<any> {
         configFile = await fs.readFile(configFilePath);
     } catch (err) {
         if (err instanceof Error && (err as NodeJS.ErrnoException).code === 'ENOENT') {
-            vscode.window.showErrorMessage('Config file not found! Try using "Create config file" command.');
+            vscode.window.showErrorMessage('Configuration file not found! Try using the "Set up" command.');
             return;
         }
         throw err;
