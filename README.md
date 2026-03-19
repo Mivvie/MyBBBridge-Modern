@@ -18,6 +18,7 @@ To use this extension, you'll need:
 - A MyBB forum installation with database access
 - Database credentials (host, port, username, password)
 - [mbbbm.php (download here)](https://github.com/Mivvie/MyBBBridge-Modern/blob/master/mbbbm.php)
+- [inc/plugins/mbbbm.php (download here)](https://github.com/Mivvie/MyBBBridge-Modern/blob/master/inc/plugins/mbbbm.php)
 
 ## Getting Started
 
@@ -50,11 +51,19 @@ Install the extension through the VS Code Extensions marketplace, or build it fr
 
 5. Once configured, the extension will activate automatically
 
-### Important: Adding mbbbm.php to Your Forum
+### Important: Adding Files to Your Forum
 
-For the cache to reset automatically when you save changes, you need to upload the `mbbbm.php` file included in this repository to your MyBB forum's root directory (the same location where you uploaded MyBB's `/upload/` directory).
+For the cache to reset automatically when you save stylesheet changes, you need to upload the `mbbbm.php` file included in this repository to your MyBB forum's root directory (the same location where you uploaded MyBB's `/upload/` directory).
 
-Without this file in place, changes will sync to your database but the forum won't immediately pick them up. You'll need to manually go into the admin panel and save your theme after each change to clear the cache.
+For custom templates added through the extension to be loaded by MyBB, you must also install the included MyBB plugin:
+
+1. Upload `inc/plugins/mbbbm.php` from this repository to the `inc/plugins/` directory of your MyBB installation.
+2. Log in to your MyBB Admin Panel and go to **Configuration → Plugins**.
+3. Find **MyBBBridge Modern** in the list and click **Activate**.
+
+Without `mbbbm.php` in the forum root, stylesheet changes will sync to your database but the forum won't immediately pick them up — you'll need to manually save your theme in the admin panel after each change.
+
+Without the plugin activated, any new templates added via the extension will exist in the database but will be invisible to MyBB's template loader and won't appear on your forum.
 
 ### Usage
 
