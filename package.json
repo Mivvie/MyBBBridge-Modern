@@ -23,7 +23,7 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.createConfig",
+				"command": "extension.setUp",
 				"title": "MyBBBridge Modern: Set up."
 			},
 			{
