@@ -82,7 +82,7 @@ export class MyBBTemplateSet extends MyBBSet {
                     vscode.window.showErrorMessage(err);
                 } else {
                     if (config.vscnotifications) {
-                        vscode.window.showInformationMessage(result);
+                        vscode.window.setStatusBarMessage(result, 5000);
                     }
                 }
             }
@@ -121,7 +121,7 @@ export class MyBBTemplateSet extends MyBBSet {
                 (err: any, result: any) => {
                     if (!err) {
                         if (config.vscnotifications) {
-                            vscode.window.showInformationMessage(`Uploaded new template "${name}" to database.`);
+                            vscode.window.setStatusBarMessage(`Uploaded new template "${name}" to database.`, 5000);
                         }
                     }
                 }
@@ -133,7 +133,7 @@ export class MyBBTemplateSet extends MyBBSet {
                 (err: any, result: any) => {
                     if (!err) {
                         if (config.vscnotifications) {
-                            vscode.window.showInformationMessage(`Updated template: ${name}.html`);
+                            vscode.window.setStatusBarMessage(`Updated template: ${name}.html`, 5000);
                         }
                     }
                 }
@@ -151,7 +151,7 @@ export class MyBBTemplateSet extends MyBBSet {
             [this.getTable('templates'), name, this.sid],
             (err: any) => {
                 if (!err && config.vscnotifications) {
-                    vscode.window.showInformationMessage(`Deleted template: ${name}.html`);
+                    vscode.window.setStatusBarMessage(`Deleted template: ${name}.html`, 5000);
                 }
             }
         );
@@ -197,7 +197,7 @@ export class MyBBStylesheets extends MyBBSet {
                     vscode.window.showErrorMessage(err);
                 } else {
                     if (config.vscnotifications) {
-                        vscode.window.showInformationMessage(result);
+                        vscode.window.setStatusBarMessage(result, 5000);
                     }
                 }
             }
@@ -239,7 +239,7 @@ export class MyBBStylesheets extends MyBBSet {
                 (err: any, result: any) => {
                     if (!err) {
                         if (config.vscnotifications) {
-                            vscode.window.showInformationMessage(`Uploaded new stylesheet "${name}" to database.`);
+                            vscode.window.setStatusBarMessage(`Uploaded new stylesheet "${name}" to database.`, 5000);
                         }
                         this.requestCacheRefresh(name);
                     }
@@ -253,7 +253,7 @@ export class MyBBStylesheets extends MyBBSet {
                 (err: any, result: any) => {
                     if (!err) {
                         if (config.vscnotifications) {
-                            vscode.window.showInformationMessage(`Updated stylesheet: ${name}`);
+                            vscode.window.setStatusBarMessage(`Updated stylesheet: ${name}`, 5000);
                         }
                         this.requestCacheRefresh(name);
                     }
@@ -272,7 +272,7 @@ export class MyBBStylesheets extends MyBBSet {
             [this.getTable('themestylesheets'), name, this.tid],
             (err: any) => {
                 if (!err && config.vscnotifications) {
-                    vscode.window.showInformationMessage(`Deleted stylesheet: ${name}`);
+                    vscode.window.setStatusBarMessage(`Deleted stylesheet: ${name}`, 5000);
                 }
                 this.requestCacheRefresh(name);
             }

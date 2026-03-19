@@ -44,7 +44,7 @@ export async function setUp() {
             await fs.writeFile(configFilePath, defaultConf);
 
             
-            vscode.window.showInformationMessage(`Configuration file ${configFilePath} created sucessfully.`);
+            vscode.window.setStatusBarMessage(`Configuration file ${configFilePath} created sucessfully.`, 5000);
             return;
         }
         throw err;
@@ -91,6 +91,6 @@ export async function addTheme() {
 
 
     if (config.vscnotifications) {
-        vscode.window.showInformationMessage(`${templates.length} templates and ${styles.length} stylesheets loaded.`)
+        vscode.window.setStatusBarMessage(`${templates.length} templates and ${styles.length} stylesheets loaded.`, 5000)
     }
 }
