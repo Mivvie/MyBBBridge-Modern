@@ -2,7 +2,7 @@
 
 A Visual Studio Code extension that makes MyBB theme development more convenient by bringing your forum templates and stylesheets directly into your editor and syncing changes back to your database.
 
-This project is a modernized and actively maintained fork of the original [MyBBBridge](https://github.com/LeMinaw/MyBBBridge) by LeMinaw, with ongoing improvements and updates.
+This project is a modernized and actively maintained fork of the original [MyBBBridge](https://github.com/LeMinaw/MyBBBridge) by [LeMinaw](https://github.com/LeMinaw), with ongoing improvements and updates.
 
 ## What is this?
 
@@ -28,7 +28,7 @@ Install the extension through the VS Code Extensions marketplace, or build it fr
 ### Initial Setup
 
 1. Open a folder in VS Code where you want to work on your MyBB theme
-2. Run the command `MyBBBridge Modern: Create "mybbm.json" configuration file`
+2. Run the command `MyBBBridge Modern: Set up.`
 3. A `.vscode/mbbbm.json` file will be created with default settings
 4. Update the configuration with your MyBB database credentials:
 
@@ -47,14 +47,22 @@ Install the extension through the VS Code Extensions marketplace, or build it fr
     "vscnotifications": true
 }
 ```
+<sub>"host" can be a domain or server IP. Same goes for "mybbUrl".</sub>
 
 5. Once configured, the extension will activate automatically
 
 ### Important: Adding mbbbm.php to Your Forum
 
-For the cache to reset automatically when you save changes, you need to upload the `mbbbm.php` file included in this repository to your MyBB forum's root directory (the same location where you uploaded MyBB's `/upload/` directory).
+For cache refresh and template auto-wiring to work, `mbbbm.php` must be installed as a MyBB plugin.
+
+Install it like any other MyBB plugin by placing the file in your forum's plugin directory and installing/activating it in your ACP.
+
+Location:
+
+- `inc/plugins/mbbbm.php`
 
 Without this file in place, changes will sync to your database but the forum won't immediately pick them up. You'll need to manually go into the admin panel and save your theme after each change to clear the cache.
+
 
 ### Usage
 
@@ -68,12 +76,13 @@ After setup, you can use these commands:
 - Direct database connection to your MyBB installation
 - Pull templates and stylesheets into your editor
 - Auto-sync changes back to your forum
+- Automatic `global.php` eval line management for template create/delete
 - Configuration management through `mbbbm.json`
-- Notifications for important actions
+
 
 ## Status
 
-This project is in early development. Features are still being added and refined.
+This project is in early development. Features are still being added and refined. Please report bugs by [submitting an issue here.](https://github.com/Mivvie/MyBBBridge-Modern/issues)
 
 ## Development
 

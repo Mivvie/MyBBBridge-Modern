@@ -3,7 +3,6 @@ import * as mysql from 'mysql';
 import * as request from 'request-promise-native';
 
 import { timestamp, urlJoin, getConfig } from './utils';
-import { config } from 'process';
 
 
 abstract class MyBBSet {
@@ -123,6 +122,7 @@ export class MyBBTemplateSet extends MyBBSet {
                         if (config.vscnotifications) {
                             vscode.window.setStatusBarMessage(`Uploaded new template "${name}" to database.`, 5000);
                         }
+                        this.requestTemplateEvalSync(name, 'add');
                     }
                 }
             );
@@ -153,8 +153,30 @@ export class MyBBTemplateSet extends MyBBSet {
                 if (!err && config.vscnotifications) {
                     vscode.window.setStatusBarMessage(`Deleted template: ${name}.html`, 5000);
                 }
+                this.requestTemplateEvalSync(name, 'remove');
             }
         );
+    }
+
+    public async requestTemplateEvalSync(name: string, operation: 'add' | 'remove'): Promise<void> {
+        const config = await getConfig();
+
+        if (config.mybbUrl) {
+            const scriptUrl = urlJoin([config.mybbUrl, 'index.php']);
+
+            await request.get({
+                uri: scriptUrl,
+                qs: {
+                    action: 'mbbbm_sync_template_eval',
+                    operation: operation,
+                    name: name
+                }
+            })
+            .catch(err => {
+                vscode.window.showErrorMessage('Failed to sync template eval line in global.php: ' + err);
+                throw err;
+            });
+        }
     }
 
 }
@@ -285,11 +307,12 @@ export class MyBBStylesheets extends MyBBSet {
         const config = await getConfig();
 
         if (config.mybbUrl) {
-            const scriptUrl = urlJoin([config.mybbUrl, 'mbbbm.php']);
+            const scriptUrl = urlJoin([config.mybbUrl, 'index.php']);
 
             await request.get({
                 uri: scriptUrl,
                 qs: {
+                    action: 'mbbbm_refresh_cache',
                     tid: this.tid,
                     name: name
                 }
