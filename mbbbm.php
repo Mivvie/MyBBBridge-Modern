@@ -11,7 +11,7 @@ function mbbbm_info() {
 		"website" => "https://github.com/Mivvie/MyBBBridge-Modern",
 		"author" => "Mivvie",
 		"authorsite" => "https://mivvie.com",
-		"version" => "0.2.0",
+		"version" => "0.3.0",
 		"compatibility" => "*"
 	);
 }

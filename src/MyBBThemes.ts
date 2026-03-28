@@ -114,30 +114,24 @@ export class MyBBTemplateSet extends MyBBSet {
 
 
         if (!result.length) {
-            this.query(
+            await this.query(
                 'INSERT INTO ?? SET title=?, template=?, sid=?, version=?',
-                [this.getTable('templates'), name, content, this.sid, version],
-                (err: any, result: any) => {
-                    if (!err) {
-                        if (config.vscnotifications) {
-                            vscode.window.setStatusBarMessage(`Uploaded new template "${name}" to database.`, 5000);
-                        }
-                        this.requestTemplateEvalSync(name, 'add');
-                    }
-                }
+                [this.getTable('templates'), name, content, this.sid, version]
             );
+
+            if (config.vscnotifications) {
+                vscode.window.setStatusBarMessage(`Uploaded new template "${name}" to database.`, 5000);
+            }
+            await this.requestTemplateEvalSync(name, 'add');
         } else {
-            this.query(
+            await this.query(
                 'UPDATE ?? SET template=? WHERE title=? AND sid=?',
-                [this.getTable('templates'), content, name, this.sid],
-                (err: any, result: any) => {
-                    if (!err) {
-                        if (config.vscnotifications) {
-                            vscode.window.setStatusBarMessage(`Updated template: ${name}.html`, 5000);
-                        }
-                    }
-                }
+                [this.getTable('templates'), content, name, this.sid]
             );
+
+            if (config.vscnotifications) {
+                vscode.window.setStatusBarMessage(`Updated template: ${name}.html`, 5000);
+            }
         }
     }
 
@@ -148,14 +142,13 @@ export class MyBBTemplateSet extends MyBBSet {
 
         await this.query(
             'DELETE FROM ?? WHERE title=? AND sid=?',
-            [this.getTable('templates'), name, this.sid],
-            (err: any) => {
-                if (!err && config.vscnotifications) {
-                    vscode.window.setStatusBarMessage(`Deleted template: ${name}.html`, 5000);
-                }
-                this.requestTemplateEvalSync(name, 'remove');
-            }
+            [this.getTable('templates'), name, this.sid]
         );
+
+        if (config.vscnotifications) {
+            vscode.window.setStatusBarMessage(`Deleted template: ${name}.html`, 5000);
+        }
+        await this.requestTemplateEvalSync(name, 'remove');
     }
 
     public async requestTemplateEvalSync(name: string, operation: 'add' | 'remove'): Promise<void> {
@@ -255,32 +248,26 @@ export class MyBBStylesheets extends MyBBSet {
 
         // TODO
         if (!result.length) {
-            this.query(
+            await this.query(
                 'INSERT INTO ?? SET name=?, stylesheet=?, tid=?, lastmodified=?',
-                [this.getTable('themestylesheets'), name, content, this.tid, timestamp()],
-                (err: any, result: any) => {
-                    if (!err) {
-                        if (config.vscnotifications) {
-                            vscode.window.setStatusBarMessage(`Uploaded new stylesheet "${name}" to database.`, 5000);
-                        }
-                        this.requestCacheRefresh(name);
-                    }
-                }
+                [this.getTable('themestylesheets'), name, content, this.tid, timestamp()]
             );
+
+            if (config.vscnotifications) {
+                vscode.window.setStatusBarMessage(`Uploaded new stylesheet "${name}" to database.`, 5000);
+            }
+            await this.requestCacheRefresh(name);
         //
         } else {
-            this.query(
+            await this.query(
                 'UPDATE ?? SET stylesheet=?, lastmodified=? WHERE name=? AND tid=?', // attached to?
-                [this.getTable('themestylesheets'), content, timestamp(), name, this.tid],
-                (err: any, result: any) => {
-                    if (!err) {
-                        if (config.vscnotifications) {
-                            vscode.window.setStatusBarMessage(`Updated stylesheet: ${name}`, 5000);
-                        }
-                        this.requestCacheRefresh(name);
-                    }
-                }
+                [this.getTable('themestylesheets'), content, timestamp(), name, this.tid]
             );
+
+            if (config.vscnotifications) {
+                vscode.window.setStatusBarMessage(`Updated stylesheet: ${name}`, 5000);
+            }
+            await this.requestCacheRefresh(name);
         }
     }
 
@@ -291,14 +278,13 @@ export class MyBBStylesheets extends MyBBSet {
 
         await this.query(
             'DELETE FROM ?? WHERE name=? AND tid=?',
-            [this.getTable('themestylesheets'), name, this.tid],
-            (err: any) => {
-                if (!err && config.vscnotifications) {
-                    vscode.window.setStatusBarMessage(`Deleted stylesheet: ${name}`, 5000);
-                }
-                this.requestCacheRefresh(name);
-            }
+            [this.getTable('themestylesheets'), name, this.tid]
         );
+
+        if (config.vscnotifications) {
+            vscode.window.setStatusBarMessage(`Deleted stylesheet: ${name}`, 5000);
+        }
+        await this.requestCacheRefresh(name);
     }
 
 

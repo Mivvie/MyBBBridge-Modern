@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import path = require('path');
 
 import { MyBBTemplateSet, MyBBStylesheets } from "./MyBBThemes";
-import { getWorkspacePath, getConfig, getConnection } from './utils';
+import { getWorkspacePath, getConfig, getConnection, closeConnection } from './utils';
 
 
 export async function onSaveEvent(document: vscode.TextDocument) {
@@ -20,18 +20,21 @@ export async function onSaveEvent(document: vscode.TextDocument) {
         const parent2Dir = path.basename(parent2Path);
         const parent3Dir = path.basename(parent3Path);
 
-        const con = getConnection(config.database);
-
         if (parent3Dir === 'Themes') {
-            if (parent1Dir === 'Templates' && ext === '.html') {
-                const templateSet = new MyBBTemplateSet(parent2Dir, con, config.database.prefix);
-                const fileName = path.basename(docPath, ext);
-                templateSet.saveElement(fileName, document.getText(), config.mybbVersion);
+            const con = getConnection(config.database);
+            try {
+                if (parent1Dir === 'Templates' && ext === '.html') {
+                    const templateSet = new MyBBTemplateSet(parent2Dir, con, config.database.prefix);
+                    const fileName = path.basename(docPath, ext);
+                    await templateSet.saveElement(fileName, document.getText(), config.mybbVersion);
 
-            } else if (parent1Dir === 'Stylesheets' && ext === '.css') {
-                const style = new MyBBStylesheets(parent2Dir, con, config.database.prefix);
-                const fileName = path.basename(docPath);
-                style.saveElement(fileName, document.getText());
+                } else if (parent1Dir === 'Stylesheets' && ext === '.css') {
+                    const style = new MyBBStylesheets(parent2Dir, con, config.database.prefix);
+                    const fileName = path.basename(docPath);
+                    await style.saveElement(fileName, document.getText());
+                }
+            } finally {
+                await closeConnection(con);
             }
         }
     }
@@ -51,7 +54,7 @@ export async function onSaveEvent(document: vscode.TextDocument) {
 export async function onDeleteEvent(event: vscode.FileDeleteEvent) {
     const config = await getConfig();
 
-    event.files.forEach(uri => {
+    for (const uri of event.files) {
         
         const docPath = uri.fsPath
         const parent1Path = path.dirname(docPath);
@@ -65,21 +68,24 @@ export async function onDeleteEvent(event: vscode.FileDeleteEvent) {
             const parent2Dir = path.basename(parent2Path);
             const parent3Dir = path.basename(parent3Path);
 
-            const con = getConnection(config.database);
-
             if (parent3Dir === 'Themes') {
-                if (parent1Dir === 'Templates' && ext === '.html') {
-                    const templateSet = new MyBBTemplateSet(parent2Dir, con, config.database.prefix);
-                    const fileName = path.basename(docPath, ext);
-                    templateSet.deleteElement(fileName);
+                const con = getConnection(config.database);
+                try {
+                    if (parent1Dir === 'Templates' && ext === '.html') {
+                        const templateSet = new MyBBTemplateSet(parent2Dir, con, config.database.prefix);
+                        const fileName = path.basename(docPath, ext);
+                        await templateSet.deleteElement(fileName);
 
-                } else if (parent1Dir === 'Stylesheets' && ext === '.css') {
-                    const style = new MyBBStylesheets(parent2Dir, con, config.database.prefix);
-                    const fileName = path.basename(docPath);
-                    style.deleteElement(fileName);
+                    } else if (parent1Dir === 'Stylesheets' && ext === '.css') {
+                        const style = new MyBBStylesheets(parent2Dir, con, config.database.prefix);
+                        const fileName = path.basename(docPath);
+                        await style.deleteElement(fileName);
+                    }
+                } finally {
+                    await closeConnection(con);
                 }
             }
         }
 
-    })
+    }
 }

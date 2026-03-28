@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { setUp, addTheme } from "./commands";
+import { setUp, addTheme, fixTemplateIndentation } from "./commands";
 import { onSaveEvent, onDeleteEvent } from "./events";
 
 
@@ -12,6 +12,10 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('extension.addTheme', addTheme)
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('extension.fixTemplateIndentation', fixTemplateIndentation)
 	);
 	
 

@@ -68,3 +68,99 @@ export function getConnection(dbConfig: any): mysql.Connection {
         password: dbConfig.password
     });
 }
+
+
+export function closeConnection(connection: mysql.Connection): Promise<void> {
+    return new Promise((resolve, reject) => {
+        connection.end((err) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve();
+        });
+    });
+}
+
+
+const htmlVoidTags = new Set([
+    'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
+    'link', 'meta', 'param', 'source', 'track', 'wbr'
+]);
+export async function findHtmlFiles(dirPath: string): Promise<string[]> {
+    const entries = await fs.readdir(dirPath, { withFileTypes: true });
+    const files: string[] = [];
+
+    for (const entry of entries) {
+        const fullPath = path.join(dirPath, entry.name);
+        if (entry.isDirectory()) {
+            const nestedFiles = await findHtmlFiles(fullPath);
+            files.push(...nestedFiles);
+            continue;
+        }
+
+        if (entry.isFile() && entry.name.toLowerCase().endsWith('.html')) {
+            files.push(fullPath);
+        }
+    }
+
+    return files;
+}
+function getTagName(token: string): string {
+    const content = token.replace(/^<\/?\s*/, '').replace(/\s.*$/, '').replace(/>$/, '').trim();
+    return content.toLowerCase();
+}
+function isClosingTag(token: string): boolean {
+    return /^<\//.test(token.trim());
+}
+function isSelfClosingTag(token: string): boolean {
+    const trimmed = token.trim();
+    if (/\/>$/.test(trimmed)) {
+        return true;
+    }
+
+    const tagName = getTagName(trimmed);
+    return htmlVoidTags.has(tagName) || /^<!doctype/i.test(trimmed);
+}
+export function normalizeHtmlIndentation(content: string, indentUnit = '    '): string {
+    const tokenRegex = /(<!--[\s\S]*?-->|<[^>]+>)/g;
+    const tokens = content.replace(/\r\n/g, '\n').split(tokenRegex);
+    const lines: string[] = [];
+    let indentLevel = 0;
+
+    for (const part of tokens) {
+        if (!part || !part.trim()) {
+            continue;
+        }
+
+        const token = part.trim();
+
+        if (/^<!--/.test(token)) {
+            lines.push(indentUnit.repeat(indentLevel) + token);
+            continue;
+        }
+
+        if (/^<[^>]+>$/.test(token)) {
+            if (isClosingTag(token)) {
+                indentLevel = Math.max(indentLevel - 1, 0);
+            }
+
+            lines.push(indentUnit.repeat(indentLevel) + token);
+
+            if (!isClosingTag(token) && !isSelfClosingTag(token)) {
+                indentLevel += 1;
+            }
+            continue;
+        }
+
+        const textLines = token.split('\n');
+        for (const textLine of textLines) {
+            const trimmedText = textLine.trim();
+            if (!trimmedText) {
+                continue;
+            }
+            lines.push(indentUnit.repeat(indentLevel) + trimmedText);
+        }
+    }
+
+    return lines.join('\n') + '\n';
+}

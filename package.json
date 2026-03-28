@@ -2,7 +2,7 @@
 	"name": "mybbbridge-modern",
 	"displayName": "MyBBBridge Modern",
 	"description": "Visual Studio Code extension aimed at making MyBB theme development more convenient.",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"publisher": "Mivvie",
 	"repository": {
 		"type": "git",
@@ -29,6 +29,10 @@
 			{
 				"command": "extension.addTheme",
 				"title": "MyBBBridge Modern: Add theme from database."
+			},
+			{
+				"command": "extension.fixTemplateIndentation",
+				"title": "MyBBBridge Modern: Fix template indentation."
 			}
 		]
 	},
