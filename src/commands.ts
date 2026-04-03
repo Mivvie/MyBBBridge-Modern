@@ -4,7 +4,7 @@ import path = require('path');
 
 import { MyBBTemplateSet, MyBBStylesheets } from "./MyBBThemes";
 import { getWorkspacePath, makePath, getConfig, getConnection,
-    findHtmlFiles, normalizeHtmlIndentation, closeConnection } from './utils';
+    normalizeHtmlIndentation, closeConnection } from './utils';
 
 
 export async function setUp() {
@@ -77,10 +77,13 @@ export async function addTheme() {
         await makePath(templatesPath);
 
         templates.forEach(async (template: any) => {
-            let templatePath = path.join(templatesPath, template.title + ".html");
+            const templateGroup = await templateSet.getTemplateGroup(template.title);
+            const templateGroupPath = path.join(getWorkspacePath(), `Themes/${themeName}/Templates/${templateGroup}`);
+            await makePath(templateGroupPath);
+
+            let templatePath = path.join(templateGroupPath, template.title + ".html");
             await fs.writeFile(templatePath, template.template);
         })
-
         
         const styles = await stylesheets.getElements();
         const stylesPath = path.join(getWorkspacePath(), `Themes/${themeName}/Stylesheets`);
@@ -112,21 +115,13 @@ export async function fixTemplateIndentation() {
             return;
         }
         const templateSet = new MyBBTemplateSet(themeName, connection, config.database.prefix);
-
-        const templatesPath = path.join(getWorkspacePath(), `Themes/${themeName}/Templates`);
-        await templateSet.getElements();
-
-        let htmlFiles: string[] = [];
-        try {
-            htmlFiles = await findHtmlFiles(templatesPath);
-        } catch (err) {
-            vscode.window.showErrorMessage(`Unable to read templates path: ${templatesPath}`);
-            throw err;
-        }
+        const templates = await templateSet.getElements();
 
         let changedFileCount = 0;
-        for (const htmlFilePath of htmlFiles) {
-            const fileUri = vscode.Uri.file(htmlFilePath);
+
+        for (const template of templates) {
+            const templateGroup = await templateSet.getTemplateGroup(template.title);
+            const fileUri = vscode.Uri.file(path.join(getWorkspacePath(), `Themes/${themeName}/Templates/${templateGroup}/${template.title}.html`));
             const document = await vscode.workspace.openTextDocument(fileUri);
             const currentContent = document.getText();
             const formattedContent = normalizeHtmlIndentation(currentContent);
@@ -138,7 +133,7 @@ export async function fixTemplateIndentation() {
 
                 const applied = await vscode.workspace.applyEdit(edit);
                 if (!applied) {
-                    throw new Error(`Failed to apply indentation edits to ${htmlFilePath}`);
+                    throw new Error(`Failed to apply indentation edits to ${template.title}.html`);
                 }
 
                 await document.save();
@@ -149,6 +144,7 @@ export async function fixTemplateIndentation() {
         if (config.vscnotifications) {
             vscode.window.setStatusBarMessage(`Template indentation fixed in ${changedFileCount} HTML file(s).`, 5000);
         }
+        
     } catch (err) {
         if (err instanceof Error && (err as NodeJS.ErrnoException).code === 'ENOENT') {
             vscode.window.showErrorMessage(`Theme not found locally. Use 'MyBBBridge Modern: Add theme from database.' command to import.`);

@@ -86,25 +86,6 @@ const htmlVoidTags = new Set([
     'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
     'link', 'meta', 'param', 'source', 'track', 'wbr'
 ]);
-export async function findHtmlFiles(dirPath: string): Promise<string[]> {
-    const entries = await fs.readdir(dirPath, { withFileTypes: true });
-    const files: string[] = [];
-
-    for (const entry of entries) {
-        const fullPath = path.join(dirPath, entry.name);
-        if (entry.isDirectory()) {
-            const nestedFiles = await findHtmlFiles(fullPath);
-            files.push(...nestedFiles);
-            continue;
-        }
-
-        if (entry.isFile() && entry.name.toLowerCase().endsWith('.html')) {
-            files.push(fullPath);
-        }
-    }
-
-    return files;
-}
 function getTagName(token: string): string {
     const content = token.replace(/^<\/?\s*/, '').replace(/\s.*$/, '').replace(/>$/, '').trim();
     return content.toLowerCase();
@@ -164,3 +145,4 @@ export function normalizeHtmlIndentation(content: string, indentUnit = '    '): 
 
     return lines.join('\n') + '\n';
 }
+

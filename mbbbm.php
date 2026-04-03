@@ -8,10 +8,10 @@ function mbbbm_info() {
 	return array(
 		"name" => "MyBBBridge Modern",
 		"description" => "Helper plugin for the MyBBBridge Modern Visual Studio Code extension.",
-		"website" => "https://github.com/Mivvie/MyBBBridge-Modern",
+		"website" => "https://marketplace.visualstudio.com/items?itemName=Mivvie.mybbbridge-modern",
 		"author" => "Mivvie",
 		"authorsite" => "https://mivvie.com",
-		"version" => "0.3.0",
+		"version" => "0.4.0",
 		"compatibility" => "*"
 	);
 }
@@ -86,10 +86,12 @@ function mbbbm_sync_template_eval_line($name, $operation) {
 
 function mbbbm_refresh_cache() {
 	global $mybb, $db;
+
+	$action = isset($mybb->input['action']) ? trim((string)$mybb->input['action']) : '';
 	
-	if($mybb->input['action'] === 'mbbbm_sync_template_eval') {
-		$name = trim($mybb->input['name']);
-		$operation = trim($mybb->input['operation']);
+	if($action === 'mbbbm_sync_template_eval') {
+		$name = isset($mybb->input['name']) ? trim((string)$mybb->input['name']) : '';
+		$operation = isset($mybb->input['operation']) ? trim((string)$mybb->input['operation']) : '';
 
 		if(empty($name) || empty($operation)) {
 			http_response_code(400);
@@ -109,7 +111,7 @@ function mbbbm_refresh_cache() {
 		exit;
 	}
 
-	if($mybb->input['action'] !== 'mbbbm_refresh_cache')
+	if($action !== 'mbbbm_refresh_cache')
 		return;
 	
 	define("IN_MYBB", 1);
@@ -117,8 +119,8 @@ function mbbbm_refresh_cache() {
 	
 	require_once "./admin/inc/functions_themes.php";
 	
-	$tid = intval($mybb->input['tid']);
-	$name = $mybb->input['name'];
+	$tid = intval($mybb->input['tid'] ?? 0);
+	$name = isset($mybb->input['name']) ? (string)$mybb->input['name'] : '';
 	
 	if(empty($tid) || empty($name))
 		exit;

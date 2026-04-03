@@ -35,7 +35,7 @@ Install the extension through the VS Code Extensions marketplace, or build it fr
 ```json
 {
     "database": {
-        "host": "example.com",
+        "host": "127.0.0.1",
         "port": 3306,
         "database": "mybb",
         "prefix": "mybb_",

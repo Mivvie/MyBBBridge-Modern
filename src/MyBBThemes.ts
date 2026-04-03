@@ -3,6 +3,7 @@ import * as mysql from 'mysql';
 import * as request from 'request-promise-native';
 
 import { timestamp, urlJoin, getConfig } from './utils';
+import { title } from 'process';
 
 
 abstract class MyBBSet {
@@ -170,6 +171,63 @@ export class MyBBTemplateSet extends MyBBSet {
                 throw err;
             });
         }
+    }
+
+    
+    public async getTemplateGroup(templateTitle: string): Promise<string> {
+        const groupMappings = [
+            { match: /^calendar/, group: 'Calendar Templates' },
+            { match: /^editpost/, group: 'Edit Post Templates' },
+            { match: /^forumbit/, group: 'Forum Bit Templates' },
+            { match: /^forumjump/, group: 'Forum Jump Templates' },
+            { match: /^forumdisplay/, group: 'Forum Display Templates' },
+            { match: /^index/, group: 'Index Templates' },
+            { match: /^error/, group: 'Error Templates' },
+            { match: /^memberlist/, group: 'Member List Templates' },
+            { match: /^multipage/, group: 'Multipage Templates' },
+            { match: /^private/, group: 'Private Messaging Templates' },
+            { match: /^portal/, group: 'Portal Templates' },
+            { match: /^postbit/, group: 'Post Bit Templates' },
+            { match: /^posticons/, group: 'Post Icons Templates' },
+            { match: /^showthread/, group: 'Show Thread Templates' },
+            { match: /^usercp/, group: 'User Control Panel Templates' },
+            { match: /^online/, group: 'Who\'s Online Templates' },
+            { match: /^moderation/, group: 'Moderation Templates' },
+            { match: /^nav/, group: 'Navigation Templates' },
+            { match: /^search/, group: 'Search Templates' },
+            { match: /^showteam/, group: 'Show Team Templates' },
+            { match: /^reputation/, group: 'Reputation Templates' },
+            { match: /^newthread/, group: 'New Thread Templates' },
+            { match: /^newreply/, group: 'New Reply Templates' },
+            { match: /^member/, group: 'Member Templates' },
+            { match: /^warnings/, group: 'Warning Templates' },
+            { match: /^global/, group: 'Global Templates' },
+            { match: /^header/, group: 'Header Templates' },
+            { match: /^managegroup/, group: 'Manage Group Templates' },
+            { match: /^misc/, group: 'Misc Templates' },
+            { match: /^modcp/, group: 'Moderator CP Templates' },
+            { match: /^announcement/, group: 'Announcement Templates' },
+            { match: /^polls/, group: 'Poll Templates' },
+            { match: /^post/, group: 'Post Templates' },
+            { match: /^printthread/, group: 'Print Thread Templates' },
+            { match: /^report/, group: 'Report Templates' },
+            { match: /^smilieinsert/, group: 'Smilie Insert Templates' },
+            { match: /^stats/, group: 'Statistics Templates' },
+            { match: /^xmlhttp/, group: 'XMLHTTP Templates' },
+            { match: /^footer/, group: 'Footer Templates' },
+            { match: /^video/, group: 'Video Templates' },
+            { match: /^sendthread/, group: 'Send Thread Templates' },
+            { match: /^mycode/, group: 'MyCode Templates' },
+        ];
+
+        const templatePrefix = templateTitle.split('_')[0].toLowerCase();
+        const mappedTemplatePrefix = groupMappings.find(m => m.match.test(templatePrefix));
+
+        if (mappedTemplatePrefix) {
+            return mappedTemplatePrefix.group;
+        }
+
+        return "Ungrouped";
     }
 
 }

@@ -13,29 +13,31 @@ export async function onSaveEvent(document: vscode.TextDocument) {
     const parent2Path = path.dirname(parent1Path);
     const parent3Path = path.dirname(parent2Path);
     const parent4Path = path.dirname(parent3Path);
+    const parent5Path = path.dirname(parent4Path);
 
-    if (parent4Path === getWorkspacePath()) {
-        const ext = path.extname(docPath);
-        const parent1Dir = path.basename(parent1Path);
-        const parent2Dir = path.basename(parent2Path);
-        const parent3Dir = path.basename(parent3Path);
+    const ext = path.extname(docPath);
+    const parent1Dir = path.basename(parent1Path);
+    const parent2Dir = path.basename(parent2Path);
+    const parent3Dir = path.basename(parent3Path);
+    const parent4Dir = path.basename(parent4Path);
 
-        if (parent3Dir === 'Themes') {
-            const con = getConnection(config.database);
-            try {
-                if (parent1Dir === 'Templates' && ext === '.html') {
-                    const templateSet = new MyBBTemplateSet(parent2Dir, con, config.database.prefix);
-                    const fileName = path.basename(docPath, ext);
-                    await templateSet.saveElement(fileName, document.getText(), config.mybbVersion);
-
-                } else if (parent1Dir === 'Stylesheets' && ext === '.css') {
-                    const style = new MyBBStylesheets(parent2Dir, con, config.database.prefix);
-                    const fileName = path.basename(docPath);
-                    await style.saveElement(fileName, document.getText());
-                }
-            } finally {
-                await closeConnection(con);
-            }
+    if (parent5Path === getWorkspacePath() && parent2Dir === 'Templates' && parent4Dir === 'Themes' && ext === '.html') {
+        const con = getConnection(config.database);
+        try {
+            const templateSet = new MyBBTemplateSet(parent3Dir, con, config.database.prefix);
+            const fileName = path.basename(docPath, ext);
+            await templateSet.saveElement(fileName, document.getText(), config.mybbVersion);
+        } finally {
+            await closeConnection(con);
+        }
+    } else if (parent4Path === getWorkspacePath() && parent1Dir === 'Stylesheets' && ext === '.css' && parent3Dir === 'Themes') {
+        const con = getConnection(config.database);
+        try {
+            const style = new MyBBStylesheets(parent2Dir, con, config.database.prefix);
+            const fileName = path.basename(docPath);
+            await style.saveElement(fileName, document.getText());
+        } finally {
+            await closeConnection(con);
         }
     }
     
@@ -61,29 +63,31 @@ export async function onDeleteEvent(event: vscode.FileDeleteEvent) {
         const parent2Path = path.dirname(parent1Path);
         const parent3Path = path.dirname(parent2Path);
         const parent4Path = path.dirname(parent3Path);
+        const parent5Path = path.dirname(parent4Path);
 
-        if (parent4Path === getWorkspacePath()) {
-            const ext = path.extname(docPath);
-            const parent1Dir = path.basename(parent1Path);
-            const parent2Dir = path.basename(parent2Path);
-            const parent3Dir = path.basename(parent3Path);
+        const ext = path.extname(docPath);
+        const parent1Dir = path.basename(parent1Path);
+        const parent2Dir = path.basename(parent2Path);
+        const parent3Dir = path.basename(parent3Path);
+        const parent4Dir = path.basename(parent4Path);
 
-            if (parent3Dir === 'Themes') {
-                const con = getConnection(config.database);
-                try {
-                    if (parent1Dir === 'Templates' && ext === '.html') {
-                        const templateSet = new MyBBTemplateSet(parent2Dir, con, config.database.prefix);
-                        const fileName = path.basename(docPath, ext);
-                        await templateSet.deleteElement(fileName);
-
-                    } else if (parent1Dir === 'Stylesheets' && ext === '.css') {
-                        const style = new MyBBStylesheets(parent2Dir, con, config.database.prefix);
-                        const fileName = path.basename(docPath);
-                        await style.deleteElement(fileName);
-                    }
-                } finally {
-                    await closeConnection(con);
-                }
+        if (parent5Path === getWorkspacePath() && parent2Dir === 'Templates' && parent4Dir === 'Themes' && ext === '.html') {
+            const con = getConnection(config.database);
+            try {
+                const templateSet = new MyBBTemplateSet(parent3Dir, con, config.database.prefix);
+                const fileName = path.basename(docPath, ext);
+                await templateSet.deleteElement(fileName);
+            } finally {
+                await closeConnection(con);
+            }
+        } else if (parent4Path === getWorkspacePath() && parent1Dir === 'Stylesheets' && ext === '.css' && parent3Dir === 'Themes') {
+            const con = getConnection(config.database);
+            try {
+                const style = new MyBBStylesheets(parent2Dir, con, config.database.prefix);
+                const fileName = path.basename(docPath);
+                await style.deleteElement(fileName);
+            } finally {
+                await closeConnection(con);
             }
         }
 
