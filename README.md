@@ -17,7 +17,7 @@ To use this extension, you'll need:
 - Visual Studio Code
 - A MyBB forum installation with database access
 - Database credentials (host, port, username, password)
-- [mbbbm.php (download here)](https://github.com/Mivvie/MyBBBridge-Modern/blob/master/mbbbm.php)
+- [mbbbm.php (download here)](https://github.com/Mivvie/MyBBBridge-Modern/releases/latest)
 
 ## Getting Started
 
