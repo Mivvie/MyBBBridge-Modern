@@ -4,6 +4,8 @@ A Visual Studio Code extension that makes MyBB theme development more convenient
 
 This project is a modernized and actively maintained fork of the original [MyBBBridge](https://github.com/LeMinaw/MyBBBridge) by [LeMinaw](https://github.com/LeMinaw), with ongoing improvements and updates.
 
+> ⚠️ MyBBBridge Modern has temporarily been taking off the Visual Studio Code marketplace, and I am working on getting it back on there. In the mean time, check the releases page here on GitHub!
+
 ## What is this?
 
 If you develop themes for MyBB forums, this extension bridges the gap between your theme files in the database and your code editor. Instead of editing templates and stylesheets through the MyBB admin panel, you can work with them in VS Code like you would with any other project.
@@ -17,7 +19,7 @@ To use this extension, you'll need:
 - Visual Studio Code
 - A MyBB forum installation with database access
 - Database credentials (host, port, username, password)
-- [mbbbm.php (download here)](https://github.com/Mivvie/MyBBBridge-Modern/releases/latest)
+- [mbbbm.php (download here)](https://github.com/regiratior/MyBBBridge-Modern/releases/latest)
 
 ## Getting Started
 
@@ -82,7 +84,7 @@ After setup, you can use these commands:
 
 ## Status
 
-This project is in early development. Features are still being added and refined. Please report bugs by [submitting an issue here.](https://github.com/Mivvie/MyBBBridge-Modern/issues)
+This project is in early development. Features are still being added and refined. Please report bugs by [submitting an issue here.](https://github.com/regiratior/MyBBBridge-Modern/issues)
 
 ## Development
 
@@ -96,4 +98,4 @@ To work on this extension:
 
 ## Contributing
 
-Contributions are welcome! Feel free to open an issue or submit a pull request on [GitHub](https://github.com/Mivvie/MyBBBridge-Modern).
+Contributions are welcome! Feel free to open an issue or submit a pull request on [GitHub](https://github.com/regiratior/MyBBBridge-Modern).

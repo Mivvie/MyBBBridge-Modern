@@ -12,8 +12,21 @@ async function main() {
 		// Passed to --extensionTestsPath
 		const extensionTestsPath = path.resolve(__dirname, './suite/index');
 
-		// Download VS Code, unzip it and run the integration test
-		await runTests({ extensionDevelopmentPath, extensionTestsPath });
+
+		const launchArgs = [
+			'--disable-gpu',
+			'--disable-gpu-compositing',
+			'--no-sandbox',
+			'--disable-dev-shm-usage',
+			'--disable-features=RendererCodeIntegrity',
+			'--user-data-dir',
+			path.resolve(__dirname, '../../.vscode-test/user-data'),
+
+			'--extensions-dir',
+			path.resolve(__dirname, '../../.vscode-test/extensions')
+		];
+
+		await runTests({ version: '1.71.0', extensionDevelopmentPath, extensionTestsPath, launchArgs });
 	} catch (err) {
 		console.error('Failed to run tests');
 		process.exit(1);

@@ -8,10 +8,10 @@ function mbbbm_info() {
 	return array(
 		"name" => "MyBBBridge Modern",
 		"description" => "Helper plugin for the MyBBBridge Modern Visual Studio Code extension.",
-		"website" => "https://marketplace.visualstudio.com/items?itemName=Mivvie.mybbbridge-modern",
-		"author" => "Mivvie",
-		"authorsite" => "https://mivvie.com",
-		"version" => "0.4.0",
+		"website" => "https://www.youtube.com/watch?v=SWkMYO9V_-k",
+		"author" => "regiratior",
+		"authorsite" => "https://www.youtube.com/watch?v=SWkMYO9V_-k",
+		"version" => "0.4.1",
 		"compatibility" => "*"
 	);
 }
