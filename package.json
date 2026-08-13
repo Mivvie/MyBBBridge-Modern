@@ -2,7 +2,7 @@
 	"name": "MyBBBridgePlus",
 	"displayName": "MyBBBridge+",
 	"description": "Visual Studio Code extension aimed at making MyBB theme development more convenient.",
-	"version": "0.4.2",
+	"version": "0.4.3",
 	"publisher": "regiratior",
 	"repository": {
 		"type": "git",

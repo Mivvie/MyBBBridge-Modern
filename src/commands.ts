@@ -23,7 +23,7 @@ export async function setUp() {
     }
 
 
-    configFilePath = path.join(configFilePath, 'mbbbm.json');
+    configFilePath = path.join(configFilePath, 'mbbbp.json');
     try {
         await fs.access(configFilePath);
     } catch (err) {

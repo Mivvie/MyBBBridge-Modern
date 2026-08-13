@@ -161,7 +161,7 @@ export class MyBBTemplateSet extends MyBBSet {
             await request.get({
                 uri: scriptUrl,
                 qs: {
-                    action: 'mbbbm_sync_template_eval',
+                    action: 'mbbbp_sync_template_eval',
                     operation: operation,
                     name: name
                 }
@@ -356,7 +356,7 @@ export class MyBBStylesheets extends MyBBSet {
             await request.get({
                 uri: scriptUrl,
                 qs: {
-                    action: 'mbbbm_refresh_cache',
+                    action: 'mbbbp_refresh_cache',
                     tid: this.tid,
                     name: name
                 }

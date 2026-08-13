@@ -1,29 +1,29 @@
 <?php
 
 
-$plugins->add_hook("index_start", "mbbbm_refresh_cache");
+$plugins->add_hook("index_start", "mbbbp_refresh_cache");
 
 
-function mbbbm_info() {
+function mbbbp_info() {
 	return array(
 		"name" => "MyBBBridge+",
 		"description" => "Helper plugin for the MyBBBridge+ Visual Studio Code extension.",
 		"website" => "https://www.youtube.com/watch?v=SWkMYO9V_-k",
 		"author" => "regiratior",
 		"authorsite" => "https://www.youtube.com/watch?v=SWkMYO9V_-k",
-		"version" => "0.4.2",
+		"version" => "0.4.3",
 		"compatibility" => "*"
 	);
 }
 
 
-function mbbbm_activate() {}
+function mbbbp_activate() {}
 
 
-function mbbbm_deactivate() {}
+function mbbbp_deactivate() {}
 
 
-function mbbbm_get_global_file_path() {
+function mbbbp_get_global_file_path() {
 	$basePath = dirname(__FILE__);
 	$candidatePlugin = $basePath . "/../../global.php";
 
@@ -35,12 +35,12 @@ function mbbbm_get_global_file_path() {
 }
 
 
-function mbbbm_sync_template_eval_line($name, $operation) {
+function mbbbp_sync_template_eval_line($name, $operation) {
 	if(!preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $name)) {
 		return false;
 	}
 
-	$globalFile = mbbbm_get_global_file_path();
+	$globalFile = mbbbp_get_global_file_path();
 	if(empty($globalFile)) {
 		return false;
 	}
@@ -84,12 +84,12 @@ function mbbbm_sync_template_eval_line($name, $operation) {
 }
 
 
-function mbbbm_refresh_cache() {
+function mbbbp_refresh_cache() {
 	global $mybb, $db;
 
 	$action = isset($mybb->input['action']) ? trim((string)$mybb->input['action']) : '';
 	
-	if($action === 'mbbbm_sync_template_eval') {
+	if($action === 'mbbbp_sync_template_eval') {
 		$name = isset($mybb->input['name']) ? trim((string)$mybb->input['name']) : '';
 		$operation = isset($mybb->input['operation']) ? trim((string)$mybb->input['operation']) : '';
 
@@ -103,7 +103,7 @@ function mbbbm_refresh_cache() {
 			exit;
 		}
 
-		if(!mbbbm_sync_template_eval_line($name, $operation)) {
+		if(!mbbbp_sync_template_eval_line($name, $operation)) {
 			http_response_code(500);
 			exit;
 		}
@@ -111,7 +111,7 @@ function mbbbm_refresh_cache() {
 		exit;
 	}
 
-	if($action !== 'mbbbm_refresh_cache')
+	if($action !== 'mbbbp_refresh_cache')
 		return;
 	
 	define("IN_MYBB", 1);

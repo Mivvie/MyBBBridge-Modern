@@ -44,7 +44,7 @@ export function urlJoin(urlParts: string[]): string {
 
 
 export async function getConfig(): Promise<any> {
-    const configFilePath = path.join(getWorkspacePath(), '.vscode', 'mbbbm.json');
+    const configFilePath = path.join(getWorkspacePath(), '.vscode', 'mbbbp.json');
     let configFile: Buffer;
     try {
         configFile = await fs.readFile(configFilePath);
