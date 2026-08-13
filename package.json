@@ -1,12 +1,12 @@
 {
-	"name": "mybbbridge-modern",
-	"displayName": "MyBBBridge Modern",
+	"name": "MyBBBridgePlus",
+	"displayName": "MyBBBridge+",
 	"description": "Visual Studio Code extension aimed at making MyBB theme development more convenient.",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"publisher": "regiratior",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/regiratior/MyBBBridge-Modern.git"
+		"url": "https://github.com/regiratior/MyBBBridgePlus.git"
 	},
 	"engines": {
 		"vscode": "^1.109.0"
@@ -24,15 +24,15 @@
 		"commands": [
 			{
 				"command": "extension.setUp",
-				"title": "MyBBBridge Modern: Set up."
+				"title": "MyBBBridge+: Set up."
 			},
 			{
 				"command": "extension.addTheme",
-				"title": "MyBBBridge Modern: Add theme from database."
+				"title": "MyBBBridge+: Add theme from database."
 			},
 			{
 				"command": "extension.fixTemplateIndentation",
-				"title": "MyBBBridge Modern: Fix template indentation."
+				"title": "MyBBBridge+: Fix template indentation."
 			}
 		]
 	},

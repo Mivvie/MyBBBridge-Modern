@@ -6,12 +6,12 @@ $plugins->add_hook("index_start", "mbbbm_refresh_cache");
 
 function mbbbm_info() {
 	return array(
-		"name" => "MyBBBridge Modern",
-		"description" => "Helper plugin for the MyBBBridge Modern Visual Studio Code extension.",
+		"name" => "MyBBBridge+",
+		"description" => "Helper plugin for the MyBBBridge+ Visual Studio Code extension.",
 		"website" => "https://www.youtube.com/watch?v=SWkMYO9V_-k",
 		"author" => "regiratior",
 		"authorsite" => "https://www.youtube.com/watch?v=SWkMYO9V_-k",
-		"version" => "0.4.1",
+		"version" => "0.4.2",
 		"compatibility" => "*"
 	);
 }

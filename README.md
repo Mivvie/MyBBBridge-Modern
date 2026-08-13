@@ -1,10 +1,8 @@
-# MyBBBridge Modern
+# MyBBBridge+
 
 A Visual Studio Code extension that makes MyBB theme development more convenient by bringing your forum templates and stylesheets directly into your editor and syncing changes back to your database.
 
 This project is a modernized and actively maintained fork of the original [MyBBBridge](https://github.com/LeMinaw/MyBBBridge) by [LeMinaw](https://github.com/LeMinaw), with ongoing improvements and updates.
-
-> ⚠️ MyBBBridge Modern has temporarily been taking off the Visual Studio Code marketplace, and I am working on getting it back on there. In the mean time, check the releases page here on GitHub!
 
 ## What is this?
 
@@ -19,7 +17,7 @@ To use this extension, you'll need:
 - Visual Studio Code
 - A MyBB forum installation with database access
 - Database credentials (host, port, username, password)
-- [mbbbm.php (download here)](https://github.com/regiratior/MyBBBridge-Modern/releases/latest)
+- [mbbbm.php (download here)](https://github.com/regiratior/MyBBBridgePlus/releases/latest)
 
 ## Getting Started
 
@@ -30,7 +28,7 @@ Install the extension through the VS Code Extensions marketplace, or build it fr
 ### Initial Setup
 
 1. Open a folder in VS Code where you want to work on your MyBB theme
-2. Run the command `MyBBBridge Modern: Set up.`
+2. Run the command `MyBBBridge+: Set up.`
 3. A `.vscode/mbbbm.json` file will be created with default settings
 4. Update the configuration with your MyBB database credentials:
 
@@ -84,7 +82,7 @@ After setup, you can use these commands:
 
 ## Status
 
-This project is in early development. Features are still being added and refined. Please report bugs by [submitting an issue here.](https://github.com/regiratior/MyBBBridge-Modern/issues)
+This project is in early development. Features are still being added and refined. Please report bugs by [submitting an issue here.](https://github.com/regiratior/MyBBBridgePlus/issues)
 
 ## Development
 
@@ -98,4 +96,4 @@ To work on this extension:
 
 ## Contributing
 
-Contributions are welcome! Feel free to open an issue or submit a pull request on [GitHub](https://github.com/regiratior/MyBBBridge-Modern).
+Contributions are welcome! Feel free to open an issue or submit a pull request on [GitHub](https://github.com/regiratior/MyBBBridgePlus).

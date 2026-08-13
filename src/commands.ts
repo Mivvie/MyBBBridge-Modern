@@ -147,7 +147,7 @@ export async function fixTemplateIndentation() {
         
     } catch (err) {
         if (err instanceof Error && (err as NodeJS.ErrnoException).code === 'ENOENT') {
-            vscode.window.showErrorMessage(`Theme not found locally. Use 'MyBBBridge Modern: Add theme from database.' command to import.`);
+            vscode.window.showErrorMessage(`Theme not found locally. Use 'MyBBBridge+: Add theme from database.' command to import.`);
             return;
         }
         throw err;
