@@ -60,7 +60,7 @@ export async function addTheme() {
     const connection = getConnection(config.database);
 
     try {
-        const themeName = await vscode.window.showInputBox({ placeHolder: "Theme name (ensure both your template set and styles share the same name)" });
+        const themeName = await vscode.window.showInputBox({ placeHolder: "Theme name" });
         if (themeName === undefined) {
             return;
         }
@@ -68,8 +68,9 @@ export async function addTheme() {
         await makePath(themePath);
 
         
-        const templateSet = new MyBBTemplateSet(themeName, connection, config.database.prefix);
-        const stylesheets = new MyBBStylesheets(themeName, connection, config.database.prefix);
+        const stylesheets = new MyBBStylesheets(themeName, undefined, connection, config.database.prefix);
+        const targetTemplateSet = await stylesheets.getTemplateSet();
+        const templateSet = new MyBBTemplateSet(undefined, targetTemplateSet, connection, config.database.prefix);
 
 
         const templates = await templateSet.getElements();
@@ -110,11 +111,13 @@ export async function fixTemplateIndentation() {
 
 
     try {
-        const themeName = await vscode.window.showInputBox({ placeHolder: "Theme name (ensure both your template set and styles share the same name)" });
+        const themeName = await vscode.window.showInputBox({ placeHolder: "Theme name" });
         if (themeName === undefined) {
             return;
         }
-        const templateSet = new MyBBTemplateSet(themeName, connection, config.database.prefix);
+        const stylesheets = new MyBBStylesheets(themeName, undefined, connection, config.database.prefix);
+        const targetTemplateSet = await stylesheets.getTemplateSet();
+        const templateSet = new MyBBTemplateSet(undefined, targetTemplateSet, connection, config.database.prefix);
         const templates = await templateSet.getElements();
 
         let changedFileCount = 0;

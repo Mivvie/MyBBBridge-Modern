@@ -17,7 +17,7 @@ To use this extension, you'll need:
 - Visual Studio Code
 - A MyBB forum installation with database access
 - Database credentials (host, port, username, password)
-- [mbbbm.php (download here)](https://github.com/regiratior/MyBBBridgePlus/releases/latest)
+- [mbbbp.php (download here)](https://github.com/regiratior/MyBBBridgePlus/releases/latest)
 
 ## Getting Started
 
@@ -29,7 +29,7 @@ Install the extension through the VS Code Extensions marketplace, or build it fr
 
 1. Open a folder in VS Code where you want to work on your MyBB theme
 2. Run the command `MyBBBridge+: Set up.`
-3. A `.vscode/mbbbm.json` file will be created with default settings
+3. A `.vscode/mbbbp.json` file will be created with default settings
 4. Update the configuration with your MyBB database credentials:
 
 ```json
@@ -51,15 +51,15 @@ Install the extension through the VS Code Extensions marketplace, or build it fr
 
 5. Once configured, the extension will activate automatically
 
-### Important: Adding mbbbm.php to Your Forum
+### Important: Adding mbbbp.php to Your Forum
 
-For cache refresh and template auto-wiring to work, `mbbbm.php` must be installed as a MyBB plugin.
+For cache refresh and template auto-wiring to work, `mbbbp.php` must be installed as a MyBB plugin.
 
 Install it like any other MyBB plugin by placing the file in your forum's plugin directory and installing/activating it in your ACP.
 
 Location:
 
-- `inc/plugins/mbbbm.php`
+- `inc/plugins/mbbbp.php`
 
 Without this file in place, changes will sync to your database but the forum won't immediately pick them up. You'll need to manually go into the admin panel and save your theme after each change to clear the cache.
 
@@ -77,7 +77,7 @@ After setup, you can use these commands:
 - Pull templates and stylesheets into your editor
 - Auto-sync changes back to your forum
 - Automatic `global.php` eval line management for template create/delete
-- Configuration management through `mbbbm.json`
+- Configuration management through `mbbbp.json`
 
 
 ## Status

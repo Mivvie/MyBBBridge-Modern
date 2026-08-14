@@ -7,12 +7,14 @@ import { title } from 'process';
 
 
 abstract class MyBBSet {
-    name: string;
+    name: string|undefined;
+    targetTemplateSet: string|undefined;
     con: mysql.Connection;
     prefix: string;
 
-    public constructor(name:string, con: mysql.Connection, prefix: string='mybb_') {
+    public constructor(name:string|undefined, targetTemplateSet:string|undefined , con: mysql.Connection, prefix: string='mybb_') {
         this.name = name;
+        this.targetTemplateSet = targetTemplateSet;
         this.con = con;
         this.prefix = prefix;
     }
@@ -51,10 +53,10 @@ export class MyBBTemplateSet extends MyBBSet {
     private async getSid(): Promise<number|undefined> {
         const result = await this.query(
             'SELECT sid FROM ?? WHERE title=?',
-            [this.getTable('templatesets'), this.name],
+            [this.getTable('templatesets'), this.targetTemplateSet],
             (err: any, result: any) => {
                 if (!result.length) {
-                    vscode.window.showErrorMessage(`Can't find template ${this.name}!`);
+                    vscode.window.showErrorMessage(`Can't find template ${this.targetTemplateSet}!`);
                 }
             }
         );
@@ -97,7 +99,7 @@ export class MyBBTemplateSet extends MyBBSet {
             [this.getTable('templates'), this.sid],
             (err: any, result: any) => {
                 if (!result.length) {
-                    vscode.window.showErrorMessage(`No template files found for template ${this.name}!`);
+                    vscode.window.showErrorMessage(`No template files found for template ${this.targetTemplateSet}!`);
                 } 
             }
         );
@@ -235,6 +237,25 @@ export class MyBBTemplateSet extends MyBBSet {
 
 export class MyBBStylesheets extends MyBBSet {
     tid: number|undefined;
+    
+
+    async getTemplateSet(): Promise<string> {
+        const result = await this.query(
+            `SELECT ts.title
+            FROM mybb_themes th
+            JOIN mybb_templatesets ts
+            ON ts.sid = SUBSTRING_INDEX(SUBSTRING_INDEX(th.properties, '"templateset";i:', -1), ';', 1)
+            WHERE th.name = ?;`,
+            [this.name],
+            (err: any, result: any) => {
+                if (!result.length) {
+                    vscode.window.showErrorMessage(`Couldn't find template set for theme: ${this.name}!`);
+                }
+            }
+        );
+        return result[0].title;
+    }
+
 
     private async getTid() {
         const result = await this.query(
